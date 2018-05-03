@@ -1,0 +1,20 @@
+{
+  "name": "dynamically-mintable-token",
+  "version": "1.0.0",
+  "description": "A contract implementing \"dynamically mintable token\", written in Solidity.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Roger-Wu/dynamically-mintable-token.git"
+  },
+  "keywords": [],
+  "author": "Roger Wu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Roger-Wu/dynamically-mintable-token/issues"
+  },
+  "homepage": "https://github.com/Roger-Wu/dynamically-mintable-token#readme"
+}
