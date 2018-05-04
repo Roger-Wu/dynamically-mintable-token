@@ -1,5 +1,6 @@
 # dynamically-mintable-token
-A contract implementing "dynamically mintable token", written in Solidity.
+
+A token contract allowing users to mint tokens dynamically.
 
 ## Contracts
 
