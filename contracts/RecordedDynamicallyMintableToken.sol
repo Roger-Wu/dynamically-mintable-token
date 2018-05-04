@@ -5,7 +5,7 @@ import "./DynamicallyMintableToken.sol";
 /// @title Recorded dynamically mintable and burnable ERC20 token.
 /// @author Roger Wu (https://github.com/roger-wu)
 /// @dev The difference between this contract and DynamicallyMintableToken
-///   is that the amount of minted tokens are recorded in this contract.
+///   is that the amount of minted tokens is recorded in this contract.
 contract RecordedDynamicallyMintableToken is DynamicallyMintableToken {
   using SafeMath for uint;
 
