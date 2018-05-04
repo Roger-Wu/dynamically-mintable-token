@@ -100,14 +100,39 @@ contract DynamicallyMintableToken is Ownable, DetailedERC20, StandardToken {
     return true;
   }
 
+  function setMintingSpeed(address _user, uint _value) public onlyOwner {
+    uint _oldMintingSpeed = userMintingSpeed[_user];
+
+    /// update user minting speed
+    _updateBalanceOf(_user);
+    userMintingSpeed[_user] = _value;
+
+    /// update total minting speed
+    _updateTotalSupply();
+    totalMintingSpeed = totalMintingSpeed.sub(_oldMintingSpeed).add(_value);
+  }
+
   function increaseMintingSpeed(address _user, uint _value) public onlyOwner {
-    _increaseUserMintingSpeed(_user, _value);
-    _increaseTotalMintingSpeed(_value);
+    /// update user minting speed
+    _updateBalanceOf(_user);
+    userMintingSpeed[_user] = userMintingSpeed[_user].add(_value);
+
+    /// update total minting speed
+    _updateTotalSupply();
+    totalMintingSpeed = totalMintingSpeed.add(_value);
   }
 
   function decreaseMintingSpeed(address _user, uint _value) public onlyOwner {
-    _decreaseUserMintingSpeed(_user, _value);
-    _decreaseTotalMintingSpeed(_value);
+    require(_value <= userMintingSpeed[_user]);
+    require(_value <= totalMintingSpeed); // should always holds
+
+    /// update user minting speed
+    _updateBalanceOf(_user);
+    userMintingSpeed[_user] = userMintingSpeed[_user].sub(_value);
+
+    /// update total minting speed
+    _updateTotalSupply();
+    totalMintingSpeed = totalMintingSpeed.sub(_value);
   }
 
   /// getters
@@ -126,17 +151,6 @@ contract DynamicallyMintableToken is Ownable, DetailedERC20, StandardToken {
 
   /// internal functions
 
-  function _increaseTotalMintingSpeed(uint _value) internal {
-    _updateTotalSupply();
-    totalMintingSpeed = totalMintingSpeed.add(_value);
-  }
-
-  function _decreaseTotalMintingSpeed(uint _value) internal {
-    require(_value <= totalMintingSpeed);
-    _updateTotalSupply();
-    totalMintingSpeed = totalMintingSpeed.sub(_value);
-  }
-
   function _updateTotalSupply() internal {
     uint _minted = totalMintingSpeed.mul(now.sub(lastMintedTime));
     if (_minted > 0) {
@@ -145,17 +159,6 @@ contract DynamicallyMintableToken is Ownable, DetailedERC20, StandardToken {
     if (lastMintedTime != now) {
       lastMintedTime = now;
     }
-  }
-
-  function _increaseUserMintingSpeed(address _user, uint _value) internal {
-    _updateBalanceOf(_user);
-    userMintingSpeed[_user] = userMintingSpeed[_user].add(_value);
-  }
-
-  function _decreaseUserMintingSpeed(address _user, uint _value) internal {
-    require(_value <= userMintingSpeed[_user]);
-    _updateBalanceOf(_user);
-    userMintingSpeed[_user] = userMintingSpeed[_user].sub(_value);
   }
 
   function _updateBalanceOf(address _user) internal {
